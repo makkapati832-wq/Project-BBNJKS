@@ -1,0 +1,345 @@
+{
+  "info": {
+    "_postman_id": "def86123-b07f-4e8b-8d08-bceb93fc27d3",
+    "name": "SIT725",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "39612668",
+    "_collection_link": "https://go.postman.co/collection/39612668-def86123-b07f-4e8b-8d08-bceb93fc27d3?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"MAX\",\r\n  \"email\": \"max@gmail.com\",\r\n  \"password\": \"max\",\r\n  \"role\": \"teacher\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"max@gmail.com\",\r\n  \"password\": \"max\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get User Profile",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/auth/profile/6971bc8000215fdf8aa0a8e6",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "profile",
+            "6971bc8000215fdf8aa0a8e6"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Class",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NzFiYzgwMDAyMTVmZGY4YWEwYThlNiIsInJvbGUiOiJ0ZWFjaGVyIiwiaWF0IjoxNzY5MDYxNTUzLCJleHAiOjE3NjkxNDc5NTN9.wNv7tuytUm9kR6588CRwOmh2IpozW2AJBJf8BypK6WQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"className\": \"Internet and Web Development\",\r\n  \"classCode\": \"SIT725\",\r\n  \"teacherId\": \"6971bc8000215fdf8aa0a8e6\",\r\n  \"description\": \"Web security and development\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/classes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "classes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Classes",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/classes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "classes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Class",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NzFiYzgwMDAyMTVmZGY4YWEwYThlNiIsInJvbGUiOiJ0ZWFjaGVyIiwiaWF0IjoxNzY5MDYxNTUzLCJleHAiOjE3NjkxNDc5NTN9.wNv7tuytUm9kR6588CRwOmh2IpozW2AJBJf8BypK6WQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/classes/6970cc02702eb6088bd26c60",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "classes",
+            "6970cc02702eb6088bd26c60"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Class",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NzFiYzgwMDAyMTVmZGY4YWEwYThlNiIsInJvbGUiOiJ0ZWFjaGVyIiwiaWF0IjoxNzY5MDYxNTUzLCJleHAiOjE3NjkxNDc5NTN9.wNv7tuytUm9kR6588CRwOmh2IpozW2AJBJf8BypK6WQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/sessions/create",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "sessions",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Session",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"sessionName\": \"Week 1 Lab\",\r\n  \"createdBy\": \"MAX\",\r\n  \"classId\": \"6970cc02702eb6088bd26c60\",\r\n  \"teacherId\": \"6971bc8000215fdf8aa0a8e6\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/sessions/create",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "sessions",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Sessions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/sessions",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "sessions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validate QR",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"sessionId\": \"696f58c6be7b63537a3481d2\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/sessions/validate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "sessions",
+            "validate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Mark Attendance",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"studentId\": \"6971c44200215fdf8aa0a8fd\",\r\n  \"sessionId\": \"696f58c6be7b63537a3481d2\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/attendance/mark",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "attendance",
+            "mark"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
