@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SIT725</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f2f7 0%, #b3e5fc 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(33, 150, 243, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 1;
+            gap: 3rem;
+        }
+
+        .image-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 500px;
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        @media (min-width: 992px) {
+            .image-section {
+                display: flex;
+            }
+            
+            .auth-container {
+                gap: 4rem;
+            }
+        }
+
+        .image-section img {
+            width: 100%;
+            max-width: 450px;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .image-section h3 {
+            color: #1976d2;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .image-section p {
+            color: #546e7a;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .custom-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.04);
+            max-width: 450px;
+            width: 100%;
+            animation: fadeInUp 0.6s ease-out;
+            border: 1px solid rgba(33, 150, 243, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .custom-card h2 {
+            color: #263238;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .custom-card h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #2196f3, #1976d2);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .form-control {
+            border: 2px solid #e3f2fd;
+            border-radius: 12px;
+            padding: 0.875rem 1.25rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+            color: #37474f;
+        }
+
+        .form-control:focus {
+            border-color: #2196f3;
+            box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+            background-color: #fff;
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #90a4ae;
+        }
+
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 0.875rem 1.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(33, 150, 243, 0.4);
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        }
+
+        .btn-primary-custom:active {
+            transform: translateY(0);
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-danger {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #ef5350;
+        }
+
+        .text-center a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .text-center a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #1976d2;
+            transition: width 0.3s ease;
+        }
+
+        .text-center a:hover {
+            color: #0d47a1;
+        }
+
+        .text-center a:hover::after {
+            width: 100%;
+            background-color: #0d47a1;
+        }
+
+        .text-center p {
+            color: #546e7a;
+            font-size: 0.95rem;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+
+        @media (max-width: 576px) {
+            .custom-card {
+                padding: 2rem 1.5rem;
+                border-radius: 16px;
+            }
+
+            .custom-card h2 {
+                font-size: 1.75rem;
+            }
+
+            .form-control {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            .btn-primary-custom {
+                padding: 0.75rem 1.25rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .auth-container {
+                padding: 3rem 1rem;
+            }
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 1000px #fafafa inset;
+            -webkit-text-fill-color: #37474f;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .login-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <div class="auth-container">
+        <div class="login-wrapper">
+           
+            <div class="image-section">
+            <!-- Updated working image URL below -->
+            <img src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" alt="Secure Login Illustration">
+            <h3>Welcome Back!</h3>
+            <p>Access your personalized learning dashboard</p>
+            </div>
+
+            <div class="custom-card mx-auto">
+                <h2 class="text-center mb-4">Login</h2>
+                <div id="error-msg" class="alert alert-danger d-none"></div>
+                
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <input type="email" class="form-control" id="email" placeholder="Email" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom w-100">Login</button>
+                </form>
+                
+                <p class="text-center mt-3">
+                    Need an account? <a href="register.html">Register here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        // Check if already logged in
+        if(Auth.getUser()) {
+             const user = Auth.getUser();
+             window.location.href = user.role === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-msg');
+
+            try {
+                const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
+                Auth.login(response.data.user);
+
+                // Redirect based on role
+                if (response.data.user.role === 'teacher') {
+                    window.location.href = 'teacher-dashboard.html';
+                } else {
+                    window.location.href = 'student-dashboard.html';
+                }
+            } catch (err) {
+                errorDiv.classList.remove('d-none');
+                errorDiv.innerText = err.response?.data?.message || "Invalid credentials";
+            }
+        });
+    </script>
+</body>
+</html>
