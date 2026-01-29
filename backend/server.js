@@ -9,6 +9,7 @@ const authRoutes = require("./routes/authRoutes");
 const sessionRoutes = require("./routes/sessionRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const classRoutes = require("./routes/classRoutes"); // <--- Added Class Routes
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/classes", classRoutes); // <--- Connected Class Routes
+app.use("/api/admin", adminRoutes);
+
 
 // Test route
 app.get("/", (req, res) => {
