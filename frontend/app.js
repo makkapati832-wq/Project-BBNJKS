@@ -30,10 +30,16 @@ const Auth = {
             return null;
         }
         if (requiredRole && user.role !== requiredRole) {
-            // Redirect to correct dashboard if wrong role
-            window.location.href = user.role === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
+            if (user.role === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            } else if (user.role === 'teacher') {
+                window.location.href = 'teacher-dashboard.html';
+            } else {
+                window.location.href = 'student-dashboard.html';
+            }
             return null;
         }
+
         return user;
     }
 };
