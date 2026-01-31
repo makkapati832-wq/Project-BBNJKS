@@ -5,20 +5,20 @@ const sessionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // Linked to Class Model
+  // Link to Class (Required)
   classId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Class",
     required: true
   },
-  // Linked to User Model
+  // Link to Teacher (Required)
   teacherId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true
   },
   createdBy: {
-    type: String, 
+    type: String,
     required: true
   },
   qrCode: {
@@ -30,4 +30,5 @@ const sessionSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+// --- THE FIX IS HERE: Make sure this uses module.exports ---
 module.exports = mongoose.model("Session", sessionSchema);
