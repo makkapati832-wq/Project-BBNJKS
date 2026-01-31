@@ -1,15 +1,23 @@
 const express = require("express");
 const router = express.Router();
-// Import the new validateQR controller function
-const { createSession, getAllSessions, validateQR } = require("../controllers/sessionController");
+
+const { 
+  createSession, 
+  getAllSessions, 
+  validateQR, 
+  getSessionsByClass 
+} = require("../controllers/sessionController");
 
 // Create a new session (Teacher generates QR)
 router.post("/create", createSession);
 
-// Get all sessions
+// Get all sessions (Admin/Debug)
 router.get("/", getAllSessions);
 
-// Validate QR (FR-5)
+// Validate QR (FR-5 - Student scans QR)
 router.post("/validate", validateQR);
+
+// NEW: Get sessions for a specific class (For Teacher Reports)
+router.get("/class/:classId", getSessionsByClass);
 
 module.exports = router;

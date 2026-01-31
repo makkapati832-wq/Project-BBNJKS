@@ -1,6 +1,6 @@
 const Class = require("../models/Class");
 
-// FR-3: Create a new Class
+// Create a new Class
 exports.createClass = async (req, res) => {
   const { className, classCode, teacherId, description } = req.body;
 
@@ -24,7 +24,7 @@ exports.createClass = async (req, res) => {
   }
 };
 
-// FR-3: Update Class Details
+// Update Class Details
 exports.updateClass = async (req, res) => {
   const { classId } = req.params;
   const updates = req.body;
@@ -46,7 +46,7 @@ exports.updateClass = async (req, res) => {
   }
 };
 
-// NEW: Delete a Class
+// Delete a Class
 exports.deleteClass = async (req, res) => {
   const { classId } = req.params;
   try {
@@ -60,17 +60,31 @@ exports.deleteClass = async (req, res) => {
   }
 };
 
-// Get All Classes (For Student Dashboard)
+// --- UPDATED: Get All Classes with SEARCH ---
 exports.getAllClasses = async (req, res) => {
   try {
-    const classes = await Class.find().sort({ createdAt: -1 });
+    const { search } = req.query;
+    let query = {};
+
+    // If search exists, filter by name OR code (Case Insensitive)
+    if (search) {
+      query = {
+        $or: [
+          { className: { $regex: search, $options: "i" } },
+          { classCode: { $regex: search, $options: "i" } }
+        ]
+      };
+    }
+
+    const classes = await Class.find(query).populate("teacherId", "name email").sort({ createdAt: -1 });
+
     res.status(200).json(classes);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch classes" });
   }
 };
 
-// NEW: Get Classes specifically for a Teacher (For the Dropdown)
+// Get Classes specifically for a Teacher
 exports.getTeacherClasses = async (req, res) => {
   const { teacherId } = req.params;
   try {

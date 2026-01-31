@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const protect = require("../middleware/authMiddleware"); // Ensure you created this file!
 
 const { 
   createClass, 
@@ -9,19 +10,14 @@ const {
   getTeacherClasses 
 } = require("../controllers/classController");
 
-// Create Class
-router.post("/", createClass);
+// --- Protected Routes (Logged in Users Only) ---
+router.post("/", protect, createClass);
+router.put("/:classId", protect, updateClass);
+router.delete("/:classId", protect, deleteClass);
+router.get("/teacher/:teacherId", protect, getTeacherClasses);
 
-// Update Class
-router.put("/:classId", updateClass);
-
-// NEW: Delete Class
-router.delete("/:classId", deleteClass);
-
-// Get all Classes (For Student Dashboard)
+// --- Public Routes ---
+// This supports the search query (e.g., /classes?search=math)
 router.get("/", getAllClasses);
-
-// NEW: Get classes by teacher ID (For Teacher Dashboard Dropdown)
-router.get("/teacher/:teacherId", getTeacherClasses);
 
 module.exports = router;
