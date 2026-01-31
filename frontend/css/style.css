@@ -1,0 +1,440 @@
+/* ========================================
+   PROFESSIONAL DASHBOARD CSS - FINAL
+   ======================================== */
+
+/* ===== COLOR VARIABLES ===== */
+:root {
+    /* Primary Colors - Professional Blue/Teal */
+    --primary: #0891b2;
+    --primary-dark: #0e7490;
+    --primary-light: #06b6d4;
+    --secondary: #0f766e;
+    --secondary-dark: #115e59;
+    
+    /* Neutral Colors */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-light: #94a3b8;
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    
+    /* Status Colors */
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== GLOBAL RESET & FONTS ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f8fafc 100%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* FIX: Enforce Font Consistency Across Teacher/Student Dashboards */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .navbar-brand, .btn, .card-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* ===== LAYOUT & CENTERING FIXES ===== */
+
+/* 1. Ensure content expands to push footer down */
+body > .container, 
+body > .dashboard-container {
+    flex: 1 0 auto; /* Grow to fill space */
+    width: 100%;
+}
+
+/* 2. Login/Register Page Centering Logic */
+/* This targets the container on pages that have the auth-background or just one main card */
+body > .container.d-flex {
+    min-height: calc(100vh - 160px) !important; /* Total Height minus Navbar/Footer */
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== HEADER / NAVBAR ===== */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+    box-shadow: var(--shadow-lg);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #ffffff !important;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    margin: 0 0.25rem;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff !important;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    flex-shrink: 0; /* Prevent footer from shrinking */
+    margin-top: auto;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    color: var(--text-secondary);
+    padding: 2.5rem 0 2rem;
+    border-top: 2px solid var(--border);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
+
+footer h5 {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+footer p,
+footer a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    line-height: 1.8;
+}
+
+footer a:hover {
+    color: var(--primary);
+    transform: translateX(3px);
+    display: inline-block;
+}
+
+/* ===== AUTH BACKGROUND ===== */
+.auth-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #f0f9ff 100%);
+}
+
+.auth-background::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(8, 145, 178, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: backgroundMove 60s linear infinite;
+}
+
+@keyframes backgroundMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+/* ===== CARDS (Standardized for Teacher & Student) ===== */
+.custom-card, .card {
+    background: var(--bg-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif; /* Explicitly set font */
+}
+
+/* Top colored bar for all cards */
+.custom-card::before, .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+}
+
+.custom-card:hover, .card:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-5px);
+}
+
+.custom-card h3, .card h3 {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+}
+
+.custom-card h4, .card h4 {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.custom-card p, .card p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+/* ===== SCROLLABLE LISTS ===== */
+.scrollable-list {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    margin-top: 1.5rem;
+}
+
+/* Custom Scrollbar */
+.scrollable-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable-list::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(8, 145, 178, 0.3), rgba(6, 182, 212, 0.3));
+    border-radius: 10px;
+}
+
+/* ===== PROFESSIONAL LIST ITEMS ===== */
+.list-item, .list-group-item {
+    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+    padding: 1.5rem 1.75rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1rem;
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.list-item::before, .list-group-item.border-start::before {
+    /* Ensure the left border color effect works for teacher lists too */
+    display: none; 
+}
+
+/* Override bootstrap list-group-item to look like custom list-item */
+.list-group-item {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.list-item:hover, .list-group-item:hover {
+    border-color: rgba(8, 145, 178, 0.25);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    transform: translateY(-2px);
+    background: #ffffff;
+    z-index: 10;
+}
+
+/* ===== FORM ELEMENTS ===== */
+.form-label {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-control, .form-select {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1.125rem;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.15);
+    border-color: var(--primary);
+    outline: none;
+    background: #ffffff;
+}
+
+.input-group {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.input-group-text {
+    background: var(--bg-main);
+    border: 2px solid var(--border);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    padding: 0.875rem 1.75rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary-custom,
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(8, 145, 178, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success), #059669);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger), #dc2626);
+    color: white;
+}
+
+/* ===== DASHBOARD CONTAINER ===== */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    width: 100%;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== NAVIGATION PILLS (Teacher Dashboard) ===== */
+.nav-pills {
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.nav-pills .nav-link {
+    color: var(--text-secondary);
+    background: var(--bg-main);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.nav-pills .nav-link:hover {
+    background: var(--border-light);
+    border-color: var(--border);
+}
+
+.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+}
+
+/* ===== UTILITY & RESPONSIVE ===== */
+.text-primary { color: var(--primary) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+    }
+    .custom-card, .card {
+        padding: 1.5rem;
+    }
+}
+
+/* Global Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--primary), var(--primary-light));
+    border-radius: 10px;
+}

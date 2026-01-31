@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+    
+    <div class="container mt-5">
+        <div class="custom-card mx-auto text-center" style="max-width: 500px;">
+            <h2 class="mb-4">My Profile</h2>
+            
+            <!-- Profile Image Display -->
+            <div class="position-relative d-inline-block">
+                <img id="profileImg" src="https://via.placeholder.com/150" 
+                     class="rounded-circle mb-3 mt-3 border border-4 border-primary shadow" 
+                     width="150" height="150" 
+                     style="object-fit: cover;">
+            </div>
+            
+            <h3 id="profileName">Loading...</h3>
+            <p id="profileEmail" class="text-muted">Loading...</p>
+            
+            <hr>
+
+            <!-- Upload Form -->
+            <form id="uploadForm">
+                <div class="mb-3 text-start">
+                    <label class="form-label fw-bold">Update Profile Picture</label>
+                    <input type="file" id="imageInput" class="form-control" accept="image/*" required>
+                    <div class="form-text">Max size: 5MB. Formats: JPG, PNG.</div>
+                </div>
+                <button type="submit" id="uploadBtn" class="btn btn-primary w-100 py-2">
+                    Upload New Photo
+                </button>
+            </form>
+            
+            <button onclick="window.history.back()" class="btn btn-outline-secondary mt-3 w-100">
+                Back to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/config.js"></script>
+    
+    <script>
+        // 1. Auth Check
+        const user = Auth.getUser();
+        if(!user) window.location.href = 'index.html';
+
+        // 2. Initial Render (From Local Storage)
+        updateUI(user);
+
+        // 3. Fetch Fresh Data from Server (Background Sync)
+        // This ensures if you changed the image on another device, it updates here.
+        (async () => {
+            try {
+                // Using 'api' instance from js/config.js
+                const { data } = await api.get(`/auth/profile/${user.id}`);
+                
+                // Update UI with fresh data
+                updateUI(data);
+                
+                // Sync LocalStorage
+                const updatedUser = { ...user, ...data };
+                localStorage.setItem("user", JSON.stringify(updatedUser));
+            } catch (err) {
+                console.warn("Could not fetch fresh profile data", err);
+            }
+        })();
+
+        function updateUI(userData) {
+            document.getElementById('profileName').textContent = userData.name;
+            document.getElementById('profileEmail').textContent = userData.email;
+            
+            // Only update image if one exists
+            if (userData.profileImage) {
+                document.getElementById('profileImg').src = userData.profileImage;
+            }
+        }
+
+        // 4. Handle Upload Logic
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+            const btn = document.getElementById('uploadBtn');
+
+            if (!file) {
+                alert("Please select a file first.");
+                return;
+            }
+
+            // UI: Show Loading State
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Uploading...';
+            btn.disabled = true;
+
+            // Prepare Data
+            const formData = new FormData();
+            formData.append('profileImage', file); // Must match backend: upload.single('profileImage')
+            formData.append('userId', user.id);    // Must match backend: req.body.userId
+
+            try {
+                // Send Request
+                // Note: api.post handles the Base URL (http://localhost:5000/api) automatically
+                const { data } = await api.post('/auth/upload-avatar', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                
+                // Success
+                document.getElementById('profileImg').src = data.imageUrl; // Update image
+                
+                // Update LocalStorage
+                const updatedUser = { ...user, profileImage: data.imageUrl };
+                localStorage.setItem("user", JSON.stringify(updatedUser));
+                
+                alert(" Profile Picture Updated Successfully!");
+                e.target.reset(); // Clear file input
+
+            } catch (err) {
+                console.error(err);
+                const msg = err.response?.data?.message || "Server Error";
+                alert(" Upload failed: " + msg);
+            } finally {
+                // Reset Button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

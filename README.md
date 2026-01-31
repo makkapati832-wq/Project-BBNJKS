@@ -45,11 +45,12 @@ Frontend Setup
 2.Navigate to the frontend directory:
 cd frontend
 
-
 3.Install dependencies:
 npm install
+
 4.Start the application:
-npm start
+npx serve .
+
 5. The application will be available at:
 http://localhost:3000
 

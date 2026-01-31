@@ -4,563 +4,265 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Dashboard</title>
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- REQUIRED: Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+    <!-- Custom Styles for Profile Widget -->
     <style>
-        :root {
-            --primary-color: #6c63ff;
-            --secondary-color: #5a52d6;
-            --accent-color: #ff6584;
-            --bg-color: #f4f7fe;
-            --card-bg: #ffffff;
-            --text-dark: #2d3436;
-            --text-light: #636e72;
+        .profile-section {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .profile-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
         }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            min-height: 100vh;
-            color: var(--text-dark);
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Decorative Background Blob */
-        body::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 500px;
-            height: 500px;
-            background: linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(255, 101, 132, 0.05) 100%);
+        .header-avatar {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            z-index: -1;
-            filter: blur(80px);
+            object-fit: cover;
+            border: 2px solid #198754; /* Green border for Teachers */
         }
-
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
+        /* Custom Tab Styling */
+        .nav-pills .nav-link.active {
+            background-color: #198754;
         }
-
-        /* --- Header Section --- */
-        .welcome-section {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 10px 40px rgba(108, 99, 255, 0.08);
-            border: 1px solid rgba(108, 99, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .welcome-text h1 {
-            font-weight: 700;
-            color: var(--text-dark);
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .welcome-text h1 span {
-            color: var(--primary-color);
-        }
-
-        #welcome-msg {
-            font-size: 1.1rem;
-            color: var(--text-light) !important;
+        .nav-pills .nav-link {
+            color: #495057;
             font-weight: 500;
         }
-
-        .header-img {
-            max-width: 350px;
-            width: 100%;
-            height: auto;
-            animation: float 4s ease-in-out infinite;
-            /* This filter turns the blue image into purple to match your theme */
-            filter: hue-rotate(30deg) drop-shadow(0 10px 15px rgba(108, 99, 255, 0.2));
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        /* --- Navigation Tabs --- */
-        .nav-actions {
-            background: #fff;
-            padding: 1rem;
-            border-radius: 16px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .tab-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Inactive State */
-        .tab-btn.btn-secondary {
-            background: #f8f9fa;
-            color: var(--text-light);
-            border: 2px solid #eef2f6;
-            box-shadow: none;
-        }
-
-        .tab-btn.btn-secondary:hover {
-            background: #fff;
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            transform: translateY(-2px);
-        }
-
-        /* Active State */
-        .tab-btn.btn-primary-custom {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
-            border-color: transparent;
-        }
-
-        /* --- Content Cards --- */
         .custom-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
-            animation: fadeInUp 0.4s ease-out;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .custom-card h3 {
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 1rem;
-        }
-
-        .custom-card h3::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 50px;
-            height: 4px;
-            background: var(--primary-color);
-            border-radius: 2px;
-        }
-
-        /* --- Form Elements --- */
-        .form-label {
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-control, .form-select {
-            background-color: #f8f9fc;
-            border: 2px solid #eef2f6;
-            border-radius: 12px;
-            padding: 0.8rem 1rem;
-            font-size: 1rem;
-            color: var(--text-dark);
-            transition: all 0.2s;
-        }
-
-        .form-control:focus, .form-select:focus {
-            background-color: #fff;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
-            outline: none;
-        }
-
-        /* --- Buttons --- */
-        .btn-primary-custom {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             border: none;
-            border-radius: 12px;
-            padding: 0.8rem 2rem;
-            color: white;
-            font-weight: 600;
-            transition: all 0.3s;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            transition: box-shadow 0.3s;
         }
-
-        .btn-primary-custom:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
-        }
-
-        .btn-primary-custom:disabled {
-            background: #b2bec3;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-warning {
-            background: #ff9f43;
-            color: white;
-            border: none;
-            padding: 0.8rem;
-            border-radius: 10px;
-        }
-        
-        .btn-danger {
-            background: #ff6584;
-            border: none;
-            padding: 0.8rem;
-            border-radius: 10px;
-        }
-
-        /* --- Session Result (QR Area) --- */
-        #sessionResult {
-            background: #f0f3ff;
-            border-radius: 16px;
-            padding: 2rem;
-            margin-top: 2rem;
-            border: 2px dashed var(--primary-color);
-        }
-
-        .qr-img {
-            max-width: 200px;
-            border: 8px solid white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            margin-top: 1rem;
-        }
-
-        /* Utility */
-        .d-none { display: none !important; }
-        .gap-2 { gap: 10px; }
-
-        @media (max-width: 768px) {
-            .welcome-section {
-                flex-direction: column-reverse;
-                text-align: center;
-                padding: 2rem;
-                gap: 2rem;
-            }
-            .header-img {
-                max-width: 250px;
-            }
-            .nav-actions {
-                flex-direction: column;
-            }
-            .tab-btn {
-                width: 100%;
-                justify-content: center;
-            }
+        .custom-card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         }
     </style>
 </head>
 <body>
-
     <div id="navbar-placeholder"></div>
-
-    <div class="dashboard-container">
+    
+    <div class="dashboard-container pt-4">
         
-        <!-- Header -->
-        <div class="welcome-section">
-            <div class="welcome-text">
-                <h1>Teacher <span>Dashboard</span></h1>
-                <p id="welcome-msg">Loading instructor profile...</p>
+        <!-- HEADER SECTION: Title + Profile Widget -->
+        <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-3">
+            <div>
+                <h2 class="fw-bold mb-0">Teacher Dashboard</h2>
+                <p class="text-muted small mb-0">Class Management & Analytics</p>
             </div>
-            <!-- UPDATED WORKING IMAGE: A dashboard/working illustration -->
-            <img src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" 
-                 alt="Teacher Dashboard" 
-                 class="header-img">
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="nav-actions">
-            <button class="btn btn-secondary tab-btn" onclick="showTab('session')" id="btn-session">
-                <i class="bi bi-qr-code"></i> Create Session
-            </button>
-            <button class="btn btn-secondary tab-btn" onclick="showTab('create')" id="btn-create">
-                <i class="bi bi-plus-circle"></i> Create Class
-            </button>
-            <button class="btn btn-secondary tab-btn" onclick="showTab('manage')" id="btn-manage">
-                <i class="bi bi-pencil-square"></i> Manage Classes
-            </button>
-        </div>
-
-        <div id="global-error" class="alert alert-danger d-none text-center"></div>
-
-        <!-- TAB 1: Create Session -->
-        <div id="tab-session" class="custom-card tab-content">
-            <h3>Start Attendance Session</h3>
-            <p class="text-secondary mb-4">Generate a QR code for your students to scan.</p>
             
-            <form id="createSessionForm">
-                <div class="mb-4">
-                    <label class="form-label">Select Subject</label>
-                    <select id="sessionClassId" class="form-select" required>
-                        <option value="">-- Choose a Class --</option>
-                    </select>
+            <!-- Profile Widget (Clickable) -->
+            <a href="profile.html" class="text-decoration-none text-dark">
+                <div class="profile-section d-flex align-items-center gap-3 p-2 rounded bg-white border">
+                    <div class="text-end d-none d-md-block">
+                        <h6 class="mb-0 fw-bold" id="headerName">Loading...</h6>
+                        <span class="badge bg-success">Teacher</span>
+                    </div>
+                    <!-- Avatar Image -->
+                    <img id="headerAvatar" src="https://via.placeholder.com/150" alt="Profile" class="header-avatar shadow-sm">
                 </div>
-                <div class="mb-4">
-                    <label class="form-label">Session Name</label>
-                    <input type="text" id="sessionName" class="form-control" placeholder="e.g. Lecture 4 - Intro to AI" disabled required>
-                </div>
-                <button type="submit" id="btnGenQr" class="btn btn-primary-custom w-100" disabled>Generate QR Code</button>
-            </form>
-
-            <div id="sessionResult" class="text-center d-none">
-                <h4 style="color: var(--primary-color); font-weight:700;">Session Active!</h4>
-                <p class="mb-2">Share this Session ID with students:</p>
-                <div class="d-inline-block bg-white px-4 py-2 rounded border fw-bold mb-3 fs-5" id="resSessionId"></div>
-                <br>
-                <img id="resQrCode" class="qr-img" src="" alt="QR Code">
-            </div>
+            </a>
         </div>
+        
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-pills mb-4 p-2 bg-light rounded" id="teacherTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#content-analytics"> Analytics</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#content-session"> Create Session</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#content-create"> New Class</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#content-manage"> Manage</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#content-reports"> Reports</button>
+            </li>
+        </ul>
 
-        <!-- TAB 2: Create Class -->
-        <div id="tab-create" class="custom-card tab-content d-none">
-            <h3>Add New Class</h3>
-            <p class="text-secondary mb-4">Register a new subject in the system.</p>
+        <div class="tab-content">
             
-            <form id="createClassForm">
-                <div class="mb-3">
-                    <label class="form-label">Class Name</label>
-                    <input type="text" id="newClassName" class="form-control" placeholder="e.g. Advanced Mathematics" required>
+            <!-- TAB 1: ANALYTICS -->
+            <div class="tab-pane fade show active" id="content-analytics">
+                <div class="row">
+                    <!-- Stats Overview -->
+                    <div class="col-md-6 mb-4">
+                        <div class="custom-card card h-100 p-4">
+                            <h4 class="text-secondary mb-4">Overview</h4>
+                            <div class="row text-center h-100 align-items-center">
+                                <div class="col-6 border-end">
+                                    <h2 id="totalStudents" class="text-primary display-4 fw-bold">0</h2>
+                                    <p class="text-muted">Total Students</p>
+                                </div>
+                                <div class="col-6">
+                                    <h2 id="totalClasses" class="text-success display-4 fw-bold">0</h2>
+                                    <p class="text-muted">Total Classes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chart Area -->
+                    <div class="col-md-6 mb-4">
+                        <div class="custom-card card h-100 p-4">
+                            <h4 class="text-secondary mb-3">System Activity</h4>
+                            <div style="height: 250px; display: flex; justify-content: center;">
+                                <canvas id="activityChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Class Code</label>
-                    <input type="text" id="newClassCode" class="form-control" placeholder="e.g. MTH-101" required>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label">Description</label>
-                    <input type="text" id="newClassDesc" class="form-control" placeholder="Brief description of the course...">
-                </div>
-                <button type="submit" class="btn btn-primary-custom w-100">Create Class</button>
-            </form>
-            <p id="createClassMsg" class="text-success text-center mt-3 fw-bold"></p>
-        </div>
-
-        <!-- TAB 3: Manage Classes -->
-        <div id="tab-manage" class="custom-card tab-content d-none">
-            <h3>Manage Classes</h3>
-            <p class="text-secondary mb-4">Update details or remove existing classes.</p>
-
-            <div class="mb-4">
-                <label class="form-label">Select Class to Edit</label>
-                <select id="manageClassSelect" class="form-select">
-                    <option value="">-- Select a Class --</option>
-                </select>
             </div>
 
-            <form id="updateClassForm" class="d-none">
-                <div class="mb-3">
-                    <label class="form-label">Update Name</label>
-                    <input type="text" id="updClassName" class="form-control">
+            <!-- TAB 2: CREATE SESSION -->
+            <div class="tab-pane fade" id="content-session">
+                <div class="custom-card card p-4">
+                    <h3 class="mb-4">Create Live Session</h3>
+                    <form id="createSessionForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">1. Select Subject</label>
+                                <select id="sessionClassSelect" class="form-select form-select-lg" required>
+                                    <option value="">-- Select Subject --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">2. Session Name</label>
+                                <input type="text" id="sessionName" class="form-control form-control-lg" placeholder="e.g. Week 5 - Lecture" disabled required>
+                            </div>
+                        </div>
+                        <button type="submit" id="genQrBtn" class="btn btn-success btn-lg w-100 mt-2" disabled>Start Live Session</button>
+                    </form>
+
+                    <!-- Dynamic QR Result -->
+                    <div id="sessionResult" class="mt-4 d-none p-4 border rounded bg-light text-center">
+                        <h4 class="text-danger fw-bold blinking">🔴 LIVE SESSION ACTIVE</h4>
+                        <p class="text-muted">This QR code refreshes every 15 minute to prevent cheating.</p>
+                        
+                        <div class="d-flex justify-content-center my-3">
+                            <canvas id="qrCanvas"></canvas>
+                        </div>
+                        
+                        <p class="mb-0">Session ID: <strong id="resSessionId">...</strong></p>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label class="form-label">Update Description</label>
-                    <input type="text" id="updClassDesc" class="form-control">
+            </div>
+
+            <!-- TAB 3: CREATE CLASS -->
+            <div class="tab-pane fade" id="content-create">
+                <div class="custom-card card p-4" style="max-width: 800px; margin: 0 auto;">
+                    <h3 class="mb-3">Create New Class</h3>
+                    <div id="createClassAlert" class="alert d-none"></div>
+                    <form id="createClassForm">
+                        <div class="mb-3">
+                            <label class="form-label">Class Name</label>
+                            <input type="text" id="newClassName" class="form-control" placeholder="e.g. Advanced Python" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Class Code</label>
+                            <input type="text" id="newClassCode" class="form-control" placeholder="e.g. CS404" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea id="newClassDesc" class="form-control" rows="3" placeholder="Optional description"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Create Class</button>
+                    </form>
                 </div>
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-warning flex-fill fw-bold">Update Details</button>
-                    <button type="button" onclick="deleteClass()" class="btn btn-danger flex-fill fw-bold">Delete Class</button>
+            </div>
+
+            <!-- TAB 4: MANAGE CLASSES -->
+            <div class="tab-pane fade" id="content-manage">
+                <div class="custom-card card p-4">
+                    <h3>Manage Classes</h3>
+                    <div id="manageAlert" class="alert d-none"></div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Select Class to Edit/Delete:</label>
+                        <select id="manageClassSelect" class="form-select">
+                            <option value="">-- Select Class --</option>
+                        </select>
+                    </div>
+
+                    <form id="updateClassForm" class="d-none border p-3 rounded bg-light">
+                        <div class="mb-3">
+                            <label class="form-label">Class Name</label>
+                            <input type="text" id="updateClassName" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <input type="text" id="updateClassDesc" class="form-control">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning flex-grow-1">Update Details</button>
+                            <button type="button" id="deleteClassBtn" class="btn btn-danger">Delete Class</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-            <p id="manageMsg" class="status-message text-center"></p>
+            </div>
+
+            <!-- TAB 5: REPORTS -->
+            <div class="tab-pane fade" id="content-reports">
+                <div class="custom-card card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3>Attendance Reports</h3>
+                        <button id="exportBtn" class="btn btn-dark d-none" onclick="exportToCSV()">
+                            📥 Export to CSV
+                        </button>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">1. Select Class</label>
+                            <select id="reportClassSelect" class="form-select">
+                                <option value="">-- Select Class --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3 d-none" id="reportSessionDiv">
+                            <label class="form-label">2. Select Session</label>
+                            <select id="reportSessionSelect" class="form-select">
+                                <option value="">-- Select Session --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="attendanceListDiv" class="mt-2">
+                        <!-- List populated by JS -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/teacher.js"></script>
 
+    <!-- INLINE SCRIPT: Populate Profile Header immediately -->
     <script>
-        // 1. Auth Check
-        const user = Auth.checkAuth('teacher');
-        let myClasses = [];
-        
-        if (user) {
-            document.getElementById('welcome-msg').innerText = `Welcome back, Instructor ${user.name}`;
-            fetchMyClasses();
-            showTab('session'); // Default tab
-        }
-
-        // 2. Fetch Classes Helper
-        async function fetchMyClasses() {
-            try {
-                const { data } = await axios.get(`${API_BASE_URL}/classes/teacher/${user.id}`);
-                myClasses = data;
-                populateDropdowns();
-            } catch (err) {
-                console.error("Failed to fetch classes");
-            }
-        }
-
-        function populateDropdowns() {
-            const dropdowns = [document.getElementById('sessionClassId'), document.getElementById('manageClassSelect')];
-            dropdowns.forEach(select => {
-                select.innerHTML = '<option value="">-- Select a Class --</option>';
-                myClasses.forEach(cls => {
-                    select.innerHTML += `<option value="${cls._id}">${cls.classCode} - ${cls.className}</option>`;
-                });
-            });
-        }
-
-        // 3. Tab Switching Logic
-        function showTab(tabName) {
-            // Hide all contents
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('d-none'));
-            // Reset buttons
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('btn-primary-custom'); 
-                el.classList.add('btn-secondary');
-            });
-
-            // Show selected
-            document.getElementById(`tab-${tabName}`).classList.remove('d-none');
-            const activeBtn = document.getElementById(`btn-${tabName}`);
-            activeBtn.classList.remove('btn-secondary');
-            activeBtn.classList.add('btn-primary-custom');
-        }
-
-        // 4. Session Logic
-        document.getElementById('sessionClassId').addEventListener('change', (e) => {
-            const val = e.target.value;
-            const input = document.getElementById('sessionName');
-            const btn = document.getElementById('btnGenQr');
-            
-            if (val) {
-                input.disabled = false;
-                btn.disabled = false;
-            } else {
-                input.disabled = true;
-                btn.disabled = true;
-                input.value = '';
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = Auth.getUser();
+            if(user) {
+                document.getElementById('headerName').textContent = user.name;
+                // Only update image if one exists (otherwise keep placeholder)
+                if(user.profileImage) {
+                    document.getElementById('headerAvatar').src = user.profileImage;
+                }
             }
         });
-
-        document.getElementById('createSessionForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            try {
-                const { data } = await axios.post(`${API_BASE_URL}/sessions/create`, {
-                    sessionName: document.getElementById('sessionName').value,
-                    createdBy: user.name,
-                    teacherId: user.id,
-                    classId: document.getElementById('sessionClassId').value
-                });
-                
-                document.getElementById('sessionResult').classList.remove('d-none');
-                document.getElementById('resSessionId').innerText = data.session._id;
-                document.getElementById('resQrCode').src = data.session.qrCode;
-                document.getElementById('sessionName').value = '';
-            } catch (err) {
-                alert("Failed to create session");
-            }
-        });
-
-        // 5. Create Class Logic
-        document.getElementById('createClassForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            try {
-                await axios.post(`${API_BASE_URL}/classes`, {
-                    className: document.getElementById('newClassName').value,
-                    classCode: document.getElementById('newClassCode').value,
-                    description: document.getElementById('newClassDesc').value,
-                    teacherId: user.id
-                });
-                document.getElementById('createClassMsg').innerText = "✅ Class Created Successfully!";
-                document.getElementById('createClassForm').reset();
-                fetchMyClasses();
-            } catch (err) {
-                alert("Failed to create class");
-            }
-        });
-
-        // 6. Manage Class Logic
-        document.getElementById('manageClassSelect').addEventListener('change', (e) => {
-            const classId = e.target.value;
-            const form = document.getElementById('updateClassForm');
-            const selectedClass = myClasses.find(c => c._id === classId);
-
-            if (selectedClass) {
-                form.classList.remove('d-none');
-                document.getElementById('updClassName').value = selectedClass.className;
-                document.getElementById('updClassDesc').value = selectedClass.description || "";
-            } else {
-                form.classList.add('d-none');
-            }
-            document.getElementById('manageMsg').innerText = "";
-        });
-
-        document.getElementById('updateClassForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const classId = document.getElementById('manageClassSelect').value;
-            try {
-                await axios.put(`${API_BASE_URL}/classes/${classId}`, {
-                    className: document.getElementById('updClassName').value,
-                    description: document.getElementById('updClassDesc').value
-                });
-                document.getElementById('manageMsg').innerText = "✅ Class Updated Successfully";
-                document.getElementById('manageMsg').style.color = "#00b894";
-                fetchMyClasses();
-            } catch(err) {
-                alert("Update failed");
-            }
-        });
-
-        async function deleteClass() {
-            const classId = document.getElementById('manageClassSelect').value;
-            if(!confirm("Are you sure? This will delete the class permanently.")) return;
-
-            try {
-                await axios.delete(`${API_BASE_URL}/classes/${classId}`);
-                document.getElementById('manageMsg').innerText = "🗑️ Class Deleted";
-                document.getElementById('manageMsg').style.color = "#d63031";
-                document.getElementById('updateClassForm').classList.add('d-none');
-                document.getElementById('manageClassSelect').value = "";
-                fetchMyClasses();
-            } catch(err) {
-                alert("Delete failed");
-            }
-        }
     </script>
 </body>
-</html>
+</html>zz
