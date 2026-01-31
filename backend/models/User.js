@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["teacher", "student"],
+    enum: ["teacher", "student", "admin"], // Restricts role to these 3 values
     required: true
   },
   password: {
@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   // --- NEW FIELD: Stores the URL of the uploaded image ---
   profileImage: {
     type: String, 
-    default: "https://via.placeholder.com/150" // Default image if user hasn't uploaded one
+    default: "https://via.placeholder.com/150" // Default image if user hasn't uploaded onegfdfs
   }
 }, { timestamps: true });
 

@@ -20,8 +20,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         // Redirect based on role
         if (data.user.role === 'teacher') {
             window.location.href = 'teacher-dashboard.html';
-        } else {
+        } else if (data.user.role === 'student'){
             window.location.href = 'student-dashboard.html';
+        } else {
+            window.location.href = 'admin-dashboard.html';
         }
     } catch (err) {
         errorAlert.textContent = err.response?.data?.message || "Invalid credentials";

@@ -27,3 +27,22 @@ exports.getDashboardStats = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch dashboard stats" });
     }
 };
+
+const Session = require("../models/Session");
+
+exports.getAdminStats = async (req, res) => {
+    try {
+        const userCount = await User.countDocuments();          // all users
+        const classCount = await Class.countDocuments();        // all classes
+        const sessionCount = await Session.countDocuments();    // all sessions
+
+        res.status(200).json({
+            userCount,
+            classCount,
+            sessionCount
+        });
+    } catch (error) {
+        console.error("Admin Analytics Error:", error);
+        res.status(500).json({ error: "Failed to fetch admin stats" });
+    }
+};

@@ -1,727 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts for Modern Look -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-     <link rel="stylesheet" href="style.css">
-    <style>
-        :root {
-            --primary-color: #6c63ff;
-            --secondary-color: #5a52d6;
-            --accent-color: #ff6584;
-            --bg-color: #f4f7fe;
-            --card-bg: #ffffff;
-            --text-dark: #2d3436;
-            --text-light: #636e72;
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <!-- App Styles -->
+    <link rel="stylesheet" href="css/style.css">
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            min-height: 100vh;
-            color: var(--text-dark);
-            overflow-x: hidden;
-        }
-
-        /* Decorative Background Blob */
-        body::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 500px;
-            height: 500px;
-            background: linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(255, 101, 132, 0.05) 100%);
-            border-radius: 50%;
-            z-index: -1;
-            filter: blur(80px);
-        }
-
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
-
-        /* --- Header Section --- */
-        .welcome-section {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 10px 40px rgba(108, 99, 255, 0.08);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(108, 99, 255, 0.05);
-        }
-
-        .welcome-text h1 {
-            font-weight: 700;
-            color: var(--text-dark);
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .welcome-text h1 span {
-            color: var(--primary-color);
-        }
-
-        #welcome-msg {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .header-img {
-            max-width: 350px;
-            width: 100%;
-            height: auto;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        /* --- FIXED CARD STYLES --- */
-        .glass-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            
-            /* --- FIX: Fixed height and Flexbox layout --- */
-            height: 450px;            /* Forces both cards to be this height */
-            display: flex;            /* Enables flexbox layout */
-            flex-direction: column;   /* Stacks title and content vertically */
-        }
-
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(108, 99, 255, 0.1);
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-dark);
-            flex-shrink: 0; /* Prevents title from shrinking */
-        }
-
-        .card-title i, .card-title svg {
-            color: var(--primary-color);
-        }
-
-       
-        
-        /* Custom Scrollbar Styling (Webkit) */
-        #classes-list::-webkit-scrollbar { width: 6px; }
-        #classes-list::-webkit-scrollbar-track { background: #f4f7fe; border-radius: 10px; }
-        #classes-list::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
-        #classes-list::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
-
-        /* --- Form Styles --- */
-        .form-control {
-            background-color: #f8f9fc;
-            border: 2px solid #eef2f6;
-            border-radius: 12px;
-            padding: 1rem;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-
-        .form-control:focus {
-            background-color: #fff;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
-        }
-
-        .btn-primary-custom {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
-        }
-
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(108, 99, 255, 0.4);
-        }
-
-        .stat-card {
-            border-radius: 16px;
-            padding: 2rem;
-            background: white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border-left: 6px solid var(--primary-color);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-title {
-            font-size: 0.9rem;
-            color: #6c757d;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 600;
-        }
-
-        .stat-value {
-            font-size: 2.4rem;
-            font-weight: 700;
-            margin-top: 0.5rem;
-        }
-
-        .qr-wrapper {
-            font-size: 0.75rem;
-        }
-
-        .qr-label {
-            font-weight: 600;
-            color: #6c757d;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .qr-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            width: 100%;
-            max-width: 100%;
-            overflow: hidden;
-        }
-
-        .qr-scroll {
-            /* 🔑 CRITICAL FIXES */
-            min-width: 0;
-            max-width: 100%;
-
-            padding: 6px 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-
-            font-family: monospace;
-            font-size: 0.7rem;
-
-            white-space: nowrap;
-            overflow-x: auto;
-            overflow-y: hidden;
-        }
-
-        /* Horizontal scrollbar */
-        .qr-scroll::-webkit-scrollbar {
-            height: 6px;
-        }
-        .qr-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e0;
-            border-radius: 10px;
-        }
-
-        .copy-btn {
-            flex-shrink: 0;   /* 🔑 keeps button visible */
-            white-space: nowrap;
-        }
-        table {
-            table-layout: fixed;
-            width: 100%;
-        }
-
-        .arrow {
-            display: inline-block;
-            transition: transform 0.25s ease;
-        }
-
-        .arrow.open {
-            transform: rotate(90deg);
-        }
-
-        /* --- Alerts/Status --- */
-        #attendance-status p {
-            padding: 1rem;
-            border-radius: 12px;
-            margin-top: 1rem;
-            font-weight: 500;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .text-success { color: #00b894 !important; background: #e3fdf5; }
-        .text-danger { color: #d63031 !important; background: #ffeaea; }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .welcome-section {
-                flex-direction: column-reverse;
-                text-align: center;
-                gap: 2rem;
-                padding: 2rem;
-            }
-            .header-img {
-                max-width: 250px;
-            }
-            /* On mobile, remove fixed height so it fits content naturally */
-            .glass-card {
-                height: auto;
-                max-height: 600px;
-            }
-        }
-    </style>
+    <!-- Charts (Admin analytics will use this) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <div id="navbar-placeholder"></div>
 
-    <div class="dashboard-container">
-        
-        <!-- HEADER SECTION: Welcome & Image -->
-        <div class="welcome-section">
-            <div class="welcome-text">
-                <h1>Admin <span>Dashboard</span></h1>
-                <p id="welcome-msg">Loading user info...</p>
-            </div>
-            <!-- Working Illustration (Studying) -->
-            <img src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/master/img/bg.svg" 
-                 alt="Studying Illustration" 
-                 class="header-img">
+<div class="dashboard-container pt-4">
+
+    <!-- HEADER: Title + Profile Widget -->
+    <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bold mb-0">Admin Dashboard</h2>
+            <p class="text-muted small mb-0">System Overview & Management</p>
         </div>
 
-         <!-- STATS -->
-    <div class="row g-4 mt-2">
-
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-title">Total Users</div>
-                <div class="stat-value" id="totalUsers">–</div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-title">Total Classes</div>
-                <div class="stat-value" id="totalClasses">–</div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-title">Total Sessions</div>
-                <div class="stat-value" id="totalSessions">–</div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ADMIN ACTIONS -->
-
-    <div id="tab-users" class="custom-card tab-content d-none mt-4">
-        <h3>Manage Users</h3>
-        <p class="text-muted small mb-3">
-            Click name or email to edit. Changes save automatically.
-        </p>
-        <div id="usersTable">Loading users...</div>
-    </div>
-    <div id="tab-classes" class="custom-card tab-content d-none mt-4">
-        <h3>Manage Classes</h3>
-        <div id="adminClasses">Loading classes...</div>
-    </div>
-
-    <div class="nav-actions mt-4">
-        <button class="btn btn-secondary tab-btn"
-            onclick="showAdminTab('users')" id="btn-users">
-            👤 Manage Users
-        </button>
-
-        <button class="btn btn-secondary tab-btn"
-            onclick="showAdminTab('classes')" id="btn-classes">
-            📚 Manage Classes
-        </button>
-    </div>
-
-    
-    <div id="toast"
-        class="position-fixed bottom-0 end-0 m-4 px-4 py-3 rounded shadow text-white d-none">
-    </div>
-
-
-<script src="app.js"></script>
-<script>
-    const user = Auth.checkAuth('admin');
-
-    if (user) {
-        document.getElementById('welcome-msg').innerText =
-            `Welcome back, Admin ${user.name}`;
-    }
-
-    function showAdminTab(tab) {
-        // Hide all tab contents
-        document.querySelectorAll(".tab-content").forEach(el =>
-            el.classList.add("d-none")
-        );
-
-        // Reset buttons
-        document.querySelectorAll(".tab-btn").forEach(btn => {
-            btn.classList.remove("btn-primary-custom");
-            btn.classList.add("btn-secondary");
-        });
-
-        // Show selected tab
-        document.getElementById(`tab-${tab}`).classList.remove("d-none");
-        const activeBtn = document.getElementById(`btn-${tab}`);
-        activeBtn.classList.remove("btn-secondary");
-        activeBtn.classList.add("btn-primary-custom");
-    }
-    showAdminTab("users");
-
-    async function loadStats() {
-        try {
-            const res = await fetch(`${API_BASE_URL}/admin/stats`);
-            const data = await res.json();
-
-            document.getElementById('totalUsers').innerText = data.users;
-            document.getElementById('totalClasses').innerText = data.classes;
-            document.getElementById('totalSessions').innerText = data.sessions;
-        } catch (err) {
-            console.error("Failed to load admin stats");
-        }
-    }
-    
-    loadStats();
-
-    async function loadUsers() {
-        try {
-            const res = await fetch(`${API_BASE_URL}/admin/users`);
-            const users = await res.json();
-
-            let html = `
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-
-            users.forEach(u => {
-                html += `
-                <tr>
-                    <td>
-                    <input
-                        class="form-control form-control-sm"
-                        value="${u.name}"
-                        onchange="updateUser('${u._id}', this.value, null)"
-                    >
-                    </td>
-
-                    <td>
-                    <input
-                        class="form-control form-control-sm"
-                        value="${u.email}"
-                        onchange="updateUser('${u._id}', null, this.value)"
-                    >
-                    </td>
-
-                    <td class="fw-bold text-capitalize">${u.role}</td>
-                    </td>
-                    <td>
-                        <button onclick="deleteUser('${u._id}')" class="btn btn-sm btn-danger">Delete</button>
-                    </td>
-                </tr>`;
-            });
-
-            html += "</tbody></table>";
-            document.getElementById("usersTable").innerHTML = html;
-        } catch (err) {
-            console.error("Failed to load users");
-        }
-    }
-
-    async function updateUser(userId, name, email) {
-        const admin = Auth.getUser();
-
-        // Prevent self-edit
-        if (userId === admin.id) {
-            showToast("You cannot edit your own account", true);
-            return;
-        }
-
-        // Email format validation
-        if (email !== null) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showToast("Invalid email format", true);
-                return;
-            }
-        }
-
-        const body = {
-            currentAdminId: admin.id
-        };
-        if (name !== null) body.name = name;
-        if (email !== null) body.email = email;
-
-        try {
-            const res = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body)
-            });
-
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message);
-
-            showToast("User updated successfully");
-        } catch (err) {
-            showToast(err.message || "Update failed", true);
-        }
-    }
-
-
-    async function deleteUser(id) {
-        if (!confirm("Delete this user permanently?")) return;
-
-        await fetch(`${API_BASE_URL}/admin/users/${id}`, {
-            method: "DELETE"
-        });
-
-        loadUsers();
-    }
-
-    loadUsers();
-    
-    async function loadClasses() {
-        const res = await fetch(`${API_BASE_URL}/admin/classes`);
-        const classes = await res.json();
-
-        let html = `
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>`;
-
-        classes.forEach(cls => {
-            html += `
-            <tr id="class-row-${cls._id}">
-                <td>${cls.classCode}</td>
-                <td>
-                    <input class="form-control form-control-sm"
-                        value="${cls.className}"
-                        onchange="updateClass('${cls._id}', this.value, null)">
-                </td>
-                <td>
-                    <input class="form-control form-control-sm"
-                        value="${cls.description || ''}"
-                        onchange="updateClass('${cls._id}', null, this.value)">
-                </td>
-                <td>
-                    <button class="btn btn-sm btn-primary d-flex align-items-center gap-1"
-                        onclick="toggleSessions('${cls._id}')">
-                        Sessions
-                        <span id="arrow-${cls._id}" class="arrow">▸</span>
-                    </button>
-                    <button class="btn btn-sm btn-danger"
-                        onclick="deleteClass('${cls._id}')">Delete</button>
-                </td>
-
-            </tr>`;
-        });
-
-        html += "</tbody></table>";
-        document.getElementById("adminClasses").innerHTML = html;
-    }
-
-    async function updateClass(id, name, desc) {
-        const body = {};
-        if (name !== null) body.className = name;
-        if (desc !== null) body.description = desc;
-
-        await fetch(`${API_BASE_URL}/admin/classes/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body)
-        });
-    }
-    
-    
-    async function deleteClass(id) {
-        if (!confirm("Delete class and ALL sessions?")) return;
-        await fetch(`${API_BASE_URL}/admin/classes/${id}`, { method: "DELETE" });
-        loadClasses();
-    }
-    
-    
-    async function toggleSessions(classId) {
-        // Close any other open session rows
-        document.querySelectorAll("[id^='sessions-row-']").forEach(row => {
-            if (row.id !== `sessions-row-${classId}`) {
-                const otherId = row.id.replace("sessions-row-", "");
-                row.remove();
-                const arrow = document.getElementById(`arrow-${otherId}`);
-                if (arrow) arrow.classList.remove("open");
-            }
-        });
-
-        const existingRow = document.getElementById(`sessions-row-${classId}`);
-        const arrow = document.getElementById(`arrow-${classId}`);
-
-        // Toggle off
-        if (existingRow) {
-            existingRow.remove();
-            arrow.classList.remove("open");
-            return;
-        }
-
-        arrow.classList.add("open");
-
-        const res = await fetch(`${API_BASE_URL}/admin/classes/${classId}/sessions`);
-        const sessions = await res.json();
-
-        const parentRow = document.getElementById(`class-row-${classId}`);
-        const sessionRow = document.createElement("tr");
-        sessionRow.id = `sessions-row-${classId}`;
-
-        let html = `
-            <td colspan="4">
-                <div class="mt-3">
-                    <h6 class="fw-bold mb-2">Sessions</h6>
-                    <ul class="list-group">
-        `;
-
-        if (sessions.length === 0) {
-            html += `<li class="list-group-item text-muted">No sessions found.</li>`;
-        } else {
-            sessions.forEach(s => {
-                const date = new Date(s.createdAt).toLocaleString();
-
-                html += `
-                    <li class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <input class="form-control form-control-sm w-50"
-                                value="${s.sessionName}"
-                                onchange="updateSessionName('${s._id}', this.value)">
-                            <span class="badge bg-success">Active</span>
-                        </div>
-
-                        <small class="text-muted d-block">
-                            Created: ${date}
-                        </small>
-
-                      <div class="qr-wrapper mt-2">
-                        <span class="qr-label">QR Code</span>
-                        <div class="qr-box">
-                                <code class="qr-scroll" id="qr-${s._id}">${s.qrCode || "N/A"}</code>
-                                <button type="button"
-                                    class="btn btn-sm btn-outline-primary copy-btn"
-                                    onclick="copyQrCode('${s._id}')">
-                                    Copy
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <button class="btn btn-sm btn-danger"
-                                onclick="deleteSession('${s._id}', '${classId}')">
-                                Delete
-                            </button>
-                        </div>
-                    </li>`;
-            });
-        }
-
-        html += `
-                    </ul>
+        <!-- Profile Widget -->
+        <a href="profile.html" class="text-decoration-none text-dark">
+            <div class="profile-section d-flex align-items-center gap-3 p-2 rounded bg-white border">
+                <div class="text-end d-none d-md-block">
+                    <h6 class="mb-0 fw-bold" id="headerName">Loading...</h6>
+                    <span class="badge bg-dark">Admin</span>
                 </div>
-            </td>
-        `;
+                <img
+                    id="headerAvatar"
+                    src="https://via.placeholder.com/150"
+                    alt="Profile"
+                    class="header-avatar shadow-sm"
+                >
+            </div>
+        </a>
+    </div>
 
-        sessionRow.innerHTML = html;
-        parentRow.after(sessionRow);
-    }
+    <!-- NAV TABS -->
+    <ul class="nav nav-pills mb-4 p-2 bg-light rounded" id="adminTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-analytics">
+                Analytics
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-users">
+                Users
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-classes">
+                Classes
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-reports">
+                Reports
+            </button>
+        </li>
+    </ul>
 
-    async function updateSessionName(sessionId, name) {
-        await fetch(`${API_BASE_URL}/admin/sessions/${sessionId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sessionName: name })
-        });
-    }
+    <!-- TAB CONTENT -->
+    <div class="tab-content">
 
-    async function deleteSession(sessionId, classId) {
-        await fetch(`${API_BASE_URL}/admin/sessions/${sessionId}`, {
-            method: "DELETE"
-        });
+        <!-- TAB 1: ANALYTICS -->
+        <div class="tab-pane fade show active" id="tab-analytics">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="custom-card card p-4 h-100">
+                        <h5 class="text-muted mb-3">Total Users</h5>
+                        <h2 class="fw-bold" id="statUsers">–</h2>
+                    </div>
+                </div>
 
-        const arrow = document.getElementById(`arrow-${classId}`);
-        const row = document.getElementById(`sessions-row-${classId}`);
+                <div class="col-md-4 mb-4">
+                    <div class="custom-card card p-4 h-100">
+                        <h5 class="text-muted mb-3">Total Classes</h5>
+                        <h2 class="fw-bold" id="statClasses">–</h2>
+                    </div>
+                </div>
 
-        if (row) row.remove();
-        if (arrow) arrow.classList.remove("open");
+                <div class="col-md-4 mb-4">
+                    <div class="custom-card card p-4 h-100">
+                        <h5 class="text-muted mb-3">Total Sessions</h5>
+                        <h2 class="fw-bold" id="statSessions">–</h2>
+                    </div>
+                </div>
+            </div>
 
-        toggleSessions(classId);
-    }
-    
-    function showToast(message, isError = false) {
-        const toast = document.getElementById("toast");
-        toast.innerText = message;
-        toast.className = `position-fixed bottom-0 end-0 m-4 px-4 py-3 rounded shadow text-white
-            ${isError ? "bg-danger" : "bg-success"}`;
+            <div class="custom-card card p-4">
+                <h4 class="mb-3">System Activity</h4>
+                <div style="height: 300px;">
+                    <canvas id="adminActivityChart"></canvas>
+                </div>
+            </div>
+        </div>
 
-        toast.classList.remove("d-none");
+        <!-- TAB 2: USERS -->
+        <div class="tab-pane fade" id="tab-users">
+            <div class="custom-card card p-4">
+                <h3 class="mb-3">Manage Users</h3>
+                <p class="text-muted small">
+                    View and manage all system users.
+                </p>
+                <input
+                    id="userSearch"
+                    class="form-control mb-3"
+                    placeholder="Search users by name, email, or role..."
+                >
+                <div id="usersAlert" class="alert d-none mb-3"></div>
+                <div id="usersTable">
+                    <!-- populated by admin.js -->
+                </div>
+            </div>
+        </div>
 
-        setTimeout(() => toast.classList.add("d-none"), 3000);
-    }
+        <!-- TAB 3: CLASSES -->
+        <div class="tab-pane fade" id="tab-classes">
+            <div class="custom-card card p-4">
+                <h3 class="mb-3">Manage Classes</h3>
+                <input
+                    id="classSearch"
+                    class="form-control mb-3"
+                    placeholder="Search by code, class name, or teacher..."
+                >
+                <div id="classesAlert" class="alert d-none mb-3"></div>
+                <div id="classesTable" class="scrollable-list">
+                    Loading classes...
+                </div>
+            </div>
+        </div>
 
-    function copyQrCode(sessionId) {
-        const el = document.getElementById(`qr-${sessionId}`);
-        if (!el) return;
+        <!-- TAB: REPORTS -->
+        <div class="tab-pane fade" id="tab-reports">
+            <div class="custom-card card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>Attendance Reports</h3>
+                <button id="exportBtn" class="btn btn-dark d-none">
+                    📥 Export CSV
+                </button>
+                </div>
 
-        const text = el.innerText;
+                <div class="row">
+                <!-- Teacher -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">1. Select Teacher</label>
+                    <select id="reportTeacherSelect" class="form-select">
+                    <option value="">-- Select Teacher --</option>
+                    </select>
+                </div>
 
-        navigator.clipboard.writeText(text)
-            .then(() => showToast("QR code copied"))
-            .catch(() => showToast("Failed to copy QR code", true));
-    }
+                <!-- Class -->
+                <div class="col-md-4 mb-3 d-none" id="reportClassDiv">
+                    <label class="form-label">2. Select Class</label>
+                    <select id="reportClassSelect" class="form-select"></select>
+                </div>
 
-    loadClasses();
+                <!-- Session -->
+                <div class="col-md-4 mb-3 d-none" id="reportSessionDiv">
+                    <label class="form-label">3. Select Session</label>
+                    <select id="reportSessionSelect" class="form-select"></select>
+                </div>
+                </div>
 
+                <div id="attendanceListDiv" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+
+<!-- admin.js will be added in Option B -->
+
+<!-- Profile header hydration (same pattern as teacher) -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const user = Auth.getUser();
+        if (user) {
+            document.getElementById("headerName").textContent = user.name;
+            if (user.profileImage) {
+                document.getElementById("headerAvatar").src = user.profileImage;
+            }
+        }
+    });
 </script>
+
 </body>
 </html>

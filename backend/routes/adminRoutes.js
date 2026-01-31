@@ -65,7 +65,7 @@ router.delete("/users/:id", async (req, res) => {
 // GET all classes
 router.get("/classes", async (req, res) => {
   try {
-    const classes = await Class.find();
+    const classes = await Class.find().populate("teacherId", "name email");
     res.json(classes);
   } catch {
     res.status(500).json({ message: "Failed to fetch classes" });
