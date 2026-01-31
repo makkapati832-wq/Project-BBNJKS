@@ -8,8 +8,11 @@ const classSchema = new mongoose.Schema({
   classCode: {
     type: String,
     required: true,
-    unique: true // e.g., SIT725
+    unique: true, // Optimization: Fast lookup prevents duplicates
+    uppercase: true, // Ensures "cs101" and "CS101" are treated the same
+    trim: true
   },
+  // Link to the Teacher (User) who owns this class
   teacherId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
