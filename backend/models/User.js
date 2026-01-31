@@ -8,16 +8,23 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,   // Ensures no duplicate emails
+    lowercase: true, // Converts email to lowercase before saving
+    trim: true
   },
   role: {
     type: String,
-    enum: ["teacher", "student"],
+    enum: ["teacher", "student"], // Restricts role to these two values
     required: true
   },
   password: {
     type: String,
     required: true
+  },
+  // --- NEW FIELD: Stores the URL of the uploaded image ---
+  profileImage: {
+    type: String, 
+    default: "https://via.placeholder.com/150" // Default image if user hasn't uploaded one
   }
 }, { timestamps: true });
 
