@@ -1,4 +1,17 @@
 services:
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
   mongo:
     image: mongo:6
     container_name: mongo
@@ -6,16 +19,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-
-  backend:
-    build: ./backend
-    container_name: backend
-    ports:
-      - "5001:5000"
-    depends_on:
-      - mongo
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/qr_attendance
 
   frontend:
     build: ./frontend
