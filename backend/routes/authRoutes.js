@@ -1,14 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const { loginUser, registerUser, getUserProfile } = require("../controllers/authController");
 
-// Route to Register a new user (Teacher or Student)
+const { 
+  loginUser, 
+  registerUser, 
+  getUserProfile,
+  updateProfile,
+  uploadImage 
+} = require("../controllers/authController");
+
 router.post("/register", registerUser);
-
-// Route to Login
 router.post("/login", loginUser);
-
-// NEW: Route to Get User Profile (FR-2)
 router.get("/profile/:userId", getUserProfile);
+
+// --- NEW: Profile Image Upload Route ---
+router.post("/upload-avatar", uploadImage, updateProfile);
 
 module.exports = router;
