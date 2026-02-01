@@ -1,11 +1,9 @@
-# frontend/Dockerfile
 FROM nginx:alpine
 
-# Remove default nginx static files
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy frontend files
+# Copy static frontend files
 COPY . /usr/share/nginx/html
 
-# Expose port 80
+# Copy nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
