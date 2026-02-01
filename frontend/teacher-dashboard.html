@@ -153,8 +153,19 @@
                         <div class="d-flex justify-content-center my-3">
                             <canvas id="qrCanvas"></canvas>
                         </div>
-                        
-                        <p class="mb-0">Session ID: <strong id="resSessionId">...</strong></p>
+                         <p class="mb-0">
+                            Session ID:
+                            <strong id="resSessionId">...</strong>
+                                <button
+                                    class="btn btn-sm btn-outline-primary ms-2"
+                                    onclick="copySessionId()">
+                                    Copy
+                                </button>
+                            </p>
+
+                            <small id="copyFeedback" class="text-success d-none">
+                                Copied to clipboard
+                            </small>
                     </div>
                 </div>
             </div>

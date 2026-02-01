@@ -136,6 +136,21 @@ function updateQR() {
     });
 }
 
+function copySessionId() {
+    const sessionId = document.getElementById("resSessionId").textContent;
+    if (!sessionId || sessionId === "...") return;
+
+    navigator.clipboard.writeText(sessionId).then(() => {
+        const feedback = document.getElementById("copyFeedback");
+        feedback.classList.remove("d-none");
+
+        setTimeout(() => {
+            feedback.classList.add("d-none");
+        }, 2000);
+    });
+}
+
+
 // --- 4. Reports & CSV Export ---
 const reportSessionDiv = document.getElementById('reportSessionDiv');
 const reportSessionSelect = document.getElementById('reportSessionSelect');
